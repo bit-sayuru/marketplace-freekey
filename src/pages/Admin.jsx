@@ -11,7 +11,7 @@ const emptyProduct = {
   name: '', tagline: '', description: '', category: 'Design', emoji: '📦',
   price: '', currency: 'LKR', validity: '', validityLabel: '',
   features: ['', '', '', ''], badge: '', badgeColor: 'purple',
-  popular: false, imageUrl: '',
+  popular: false, images: [''],
 };
 
 export default function Admin() {
@@ -44,11 +44,15 @@ export default function Admin() {
 
   const openEdit = (product) => {
     setEditingProduct(product);
+    const existingImages = Array.isArray(product.images) && product.images.length > 0
+      ? product.images
+      : (product.imageUrl ? [product.imageUrl] : ['']);
     setForm({
       ...product,
       features: product.features && product.features.length > 0
         ? [...product.features, ...Array(Math.max(0, 4 - product.features.length)).fill('')]
         : ['', '', '', ''],
+      images: existingImages,
     });
     setShowModal(true);
   };
@@ -76,11 +80,32 @@ export default function Admin() {
     }));
   };
 
+  const handleImageChange = (index, value) => {
+    setForm(prev => {
+      const images = [...prev.images];
+      images[index] = value;
+      return { ...prev, images };
+    });
+  };
+
+  const addImageField = () => {
+    setForm(prev => ({ ...prev, images: [...prev.images, ''] }));
+  };
+
+  const removeImageField = (index) => {
+    setForm(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSave = () => {
+    const { imageUrl, ...rest } = form;
     const cleanedProduct = {
-      ...form,
+      ...rest,
       price: Number(form.price),
       features: form.features.filter(f => f.trim() !== ''),
+      images: form.images.filter(url => url.trim() !== ''),
     };
 
     if (editingProduct) {
@@ -438,9 +463,40 @@ export default function Admin() {
                 </div>
               </div>
 
+              {/* Images */}
               <div className="form-group">
-                <label className="form-label">Image URL (optional)</label>
-                <input className="form-input" value={form.imageUrl} onChange={e => handleFormChange('imageUrl', e.target.value)} placeholder="https://..." />
+                <label className="form-label">
+                  Product Images <span style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>(optional — add one or more image URLs)</span>
+                </label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {form.images.map((img, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      {img ? (
+                        <img
+                          src={img}
+                          alt={`Preview ${i + 1}`}
+                          style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover', border: '1px solid var(--border-color)', flexShrink: 0 }}
+                          onError={e => { e.target.style.visibility = 'hidden'; }}
+                        />
+                      ) : (
+                        <div style={{ width: 40, height: 40, borderRadius: 6, background: 'var(--bg-card)', border: '1px solid var(--border-color)', flexShrink: 0 }} />
+                      )}
+                      <input
+                        className="form-input"
+                        value={img}
+                        onChange={e => handleImageChange(i, e.target.value)}
+                        placeholder={`Image ${i + 1} URL — https://...`}
+                      />
+                      <button type="button" onClick={() => removeImageField(i)} style={{
+                        background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                        borderRadius: 8, padding: '0 12px', color: '#f87171', cursor: 'pointer', height: 40, flexShrink: 0,
+                      }}><X size={14} /></button>
+                    </div>
+                  ))}
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={addImageField} style={{ alignSelf: 'flex-start' }}>
+                    <Plus size={14} /> Add Another Image
+                  </button>
+                </div>
               </div>
 
               <div className="form-group">

@@ -866,6 +866,67 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 6rem;
 }
 
+.detail-image-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: rgba(15, 15, 25, 0.6);
+  backdrop-filter: blur(6px);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.detail-image-nav:hover {
+  background: rgba(139, 92, 246, 0.35);
+}
+
+.detail-image-nav-prev { left: 12px; }
+.detail-image-nav-next { right: 12px; }
+
+.detail-thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.detail-thumbnail {
+  flex: 0 0 auto;
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: var(--bg-card);
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.detail-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-thumbnail:hover { opacity: 0.9; }
+
+.detail-thumbnail.active {
+  border-color: var(--purple);
+  opacity: 1;
+}
+
 .detail-features-section {
   margin-top: 32px;
 }

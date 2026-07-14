@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ArrowLeft, Clock, Shield, Zap, Star } from 'lucide-react';
+import { CheckCircle2, ArrowLeft, Clock, Shield, Zap, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
+import { getProductImages } from '../utils/productImages';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -8,6 +10,13 @@ export default function ProductDetail() {
   const navigate = useNavigate();
 
   const product = getProduct(id);
+  const images = getProductImages(product);
+  const [activeImage, setActiveImage] = useState(0);
+
+  // Reset the selected image whenever the viewed product changes
+  useEffect(() => {
+    setActiveImage(0);
+  }, [id]);
 
   if (!product) {
     return (
@@ -51,16 +60,54 @@ export default function ProductDetail() {
         <div className="detail-layout">
           {/* Left Column */}
           <div>
-            {/* Product Image */}
-            <div className="detail-image">
-              {product.imageUrl ? (
-                <img src={product.imageUrl} alt={product.name} />
+            {/* Product Image Gallery */}
+            <div className="detail-image" style={{ position: 'relative' }}>
+              {images.length > 0 ? (
+                <>
+                  <img src={images[activeImage]} alt={`${product.name} ${activeImage + 1}`} />
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        aria-label="Previous image"
+                        onClick={() => setActiveImage(prev => (prev === 0 ? images.length - 1 : prev - 1))}
+                        className="detail-image-nav detail-image-nav-prev"
+                      >
+                        <ChevronLeft size={18} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Next image"
+                        onClick={() => setActiveImage(prev => (prev === images.length - 1 ? 0 : prev + 1))}
+                        className="detail-image-nav detail-image-nav-next"
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    </>
+                  )}
+                </>
               ) : (
                 <div className="detail-image-placeholder">
                   {product.emoji || '📦'}
                 </div>
               )}
             </div>
+
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="detail-thumbnails">
+                {images.map((img, i) => (
+                  <button
+                    type="button"
+                    key={i}
+                    className={`detail-thumbnail ${i === activeImage ? 'active' : ''}`}
+                    onClick={() => setActiveImage(i)}
+                  >
+                    <img src={img} alt={`${product.name} thumbnail ${i + 1}`} />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Features */}
             <div className="detail-features-section">

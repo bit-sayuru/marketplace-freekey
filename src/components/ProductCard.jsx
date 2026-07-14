@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
+import { getProductImages } from '../utils/productImages';
 
 export default function ProductCard({ product }) {
   const { settings } = useProducts();
+  const images = getProductImages(product);
 
   const waMessage = encodeURIComponent(
     `Hi FreeKey Store! 🙏\nI want to buy *${product.name}* (${product.validity})\nPrice: LKR ${product.price.toLocaleString()}\n\nPlease help me with the order.`
@@ -25,8 +27,8 @@ export default function ProductCard({ product }) {
       )}
 
       <div className="product-card-image-placeholder">
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {images.length > 0 ? (
+          <img src={images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <span style={{ fontSize: '4rem' }}>{product.emoji || '📦'}</span>
         )}

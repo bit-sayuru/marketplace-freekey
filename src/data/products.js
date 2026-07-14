@@ -23,7 +23,7 @@ export const defaultProducts = [
     badge: 'Best Value',
     badgeColor: 'purple',
     popular: true,
-    imageUrl: '',
+    images: [],
   },
   {
     id: '2',
@@ -48,7 +48,7 @@ export const defaultProducts = [
     badge: 'Premium',
     badgeColor: 'cyan',
     popular: false,
-    imageUrl: '',
+    images: [],
   },
   {
     id: '3',
@@ -73,7 +73,7 @@ export const defaultProducts = [
     badge: 'Popular',
     badgeColor: 'orange',
     popular: false,
-    imageUrl: '',
+    images: [],
   },
 ];
 
