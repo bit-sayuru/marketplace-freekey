@@ -33,7 +33,7 @@ function AppRoutes() {
                   <div style={{ fontSize: '5rem', marginBottom: 16 }}>404</div>
                   <h2>Page Not Found</h2>
                   <p style={{ color: 'var(--text-secondary)', margin: '12px 0 24px' }}>The page you're looking for doesn't exist.</p>
-                  <a href="#/" className="btn btn-primary">Go Home</a>
+                  <a href="/" className="btn btn-primary">Go Home</a>
                 </div>
               </div>
             } />

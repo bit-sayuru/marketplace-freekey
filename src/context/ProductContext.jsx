@@ -36,32 +36,20 @@ export const ProductProvider = ({ children }) => {
   });
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
-    try {
-      return sessionStorage.getItem(AUTH_KEY) === 'true';
-    } catch {
-      return false;
-    }
+    return sessionStorage.getItem(AUTH_KEY) === 'true';
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    } catch {
-      // Storage can be blocked in private/restricted browser modes.
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-    } catch {
-      // Keep the storefront usable even when storage is unavailable.
-    }
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   }, [settings]);
 
   const login = (password) => {
     if (password === ADMIN_PASSWORD) {
-      try { sessionStorage.setItem(AUTH_KEY, 'true'); } catch {}
+      sessionStorage.setItem(AUTH_KEY, 'true');
       setIsAdminLoggedIn(true);
       return true;
     }
@@ -69,7 +57,7 @@ export const ProductProvider = ({ children }) => {
   };
 
   const logout = () => {
-    try { sessionStorage.removeItem(AUTH_KEY); } catch {}
+    sessionStorage.removeItem(AUTH_KEY);
     setIsAdminLoggedIn(false);
   };
 

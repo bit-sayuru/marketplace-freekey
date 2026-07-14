@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://bit-sayuru.github.io/marketplace-freekey/",
+  "homepage": "https://marketplace.freekey.store/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
